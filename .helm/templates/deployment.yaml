@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.global.namespace }}
+  name: {{ .Values.name }}-deployment
+  labels:
+    app: {{ .Values.appLabel }}-deployment
+
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appLabel }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appLabel }}
+    spec:
+      containers:
+      - name: {{ .Values.containerName }}-api
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        ports:
+        - containerPort: {{ .Values.containerBackPort }}
+        volumeMounts:
+          - name: static-volume
+            mountPath: /tms-app/static
+        resources:
+          requests:
+            memory: {{ .Values.resources.requests.memory }}
+            cpu: {{ .Values.resources.requests.cpu }}
+          limits:
+            memory: {{ .Values.resources.limits.memory }}
+            cpu: {{ .Values.resources.limits.cpu }}
+        env:
+          - name: DEBUG
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.containerName }}-config
+                key: DEBUG_MODE
+          - name: ORIGINAL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.containerName }}-config
+                key: ORIGINAL
+          - name: DATABASE_NAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.name }}-db-credentials-{{ .Values.database }}
+                key: db-name
+          - name: DATABASE_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.name }}-db-credentials-{{ .Values.database }}
+                key: db-user
+          - name: DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.name }}-db-credentials-{{ .Values.database }}
+                key: db-password
+          - name: DATABASE_HOST
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.name }}-db-credentials-{{ .Values.database }}
+                key: db-host
+      - name: {{ .Values.containerName }}-nginx
+        image: nginx:latest
+        ports:
+          - containerPort: {{ .Values.exposePort }}
+        volumeMounts:
+          - name: static-volume
+            mountPath: /usr/share/nginx/html/static
+          - name: {{ .Values.containerName }}-nginx-config
+            mountPath: /etc/nginx/conf.d/default.conf
+            subPath: nginx.conf
+      volumes:
+        - name: static-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.name }}-static-files-pvc
+        - name: {{ .Values.containerName }}-nginx-config
+          configMap:
+            name: {{ .Values.containerName }}-nginx-config
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.name }}-static-files-pvc
+  namespace: {{ .Values.global.namespace }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

@@ -1,0 +1,28 @@
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    container_name: Nginx
+    volumes:
+      - static_volume:/usr/share/nginx/html/static
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/base/Dockerfile
+    container_name: DjangoDRF
+    env_file:
+      - .env/.env.develop
+    volumes:
+      - .:/usr/src/app
+      - static_volume:/tms-app/static
+
+volumes:
+  static_volume:

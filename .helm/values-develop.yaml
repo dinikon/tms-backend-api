@@ -1,0 +1,31 @@
+# Default values for .helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  namespace: tms-api-dev
+
+replicaCount: 2
+name: tms-api-dev
+appLabel: tms-api-dev
+containerName: tms-api-container-dev
+appHost: apidev.swlcrm.com
+
+#data base credintial ["prod", "dev"]
+database: dev
+
+image:
+  repository: ghcr.io/dinikon/tms-backend-api-dev
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "100m"
+  limits:
+    memory: "1024Mi"
+    cpu: "200m"
+
+config:
+  # Bool значения указывать "True"
+  debug: "True"
+  originHost: "https://apidev.swlcrm.com, http://apidev.swlcrm.com"
