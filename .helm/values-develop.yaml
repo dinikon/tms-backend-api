@@ -9,7 +9,7 @@ replicaCount: 2
 name: tms-api-dev
 appLabel: tms-api-dev
 containerName: tms-api-container-dev
-appHost: apidev.swlcrm.com
+appHost: apidev.acrm.app
 
 #data base credintial ["prod", "dev"]
 database: dev
@@ -28,4 +28,4 @@ resources:
 config:
   # Bool значения указывать "True"
   debug: "True"
-  originHost: "https://apidev.swlcrm.com, http://apidev.swlcrm.com"
+  originHost: "https://apidev.acrm.app, http://apidev.acrm.app"

@@ -9,7 +9,7 @@ replicaCount: 3
 name: tms-api
 appLabel: tms-api
 containerName: tms-api-container
-appHost: api.swlcrm.com
+appHost: api.acrm.app
 
 #data base credintial ["prod", "dev"]
 database: prod
@@ -32,4 +32,4 @@ resources:
 config:
   # Bool значения указывать "True"
   debug: "False"
-  originHost: "https://api.swlcrm.com"
+  originHost: "https://api.acrm.app"
