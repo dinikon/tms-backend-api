@@ -35,5 +35,5 @@ config:
   originHost: "https://api.acrm.app"
   corsAllowed: "https://acrm.app"
   corsAllowedAll: "False"
-  accessTokenLifetime: 10
-  refreshTokenLifetime: 10
+  accessTokenLifetime: 1
+  refreshTokenLifetime: 1440
