@@ -6,6 +6,10 @@ metadata:
 data:
   DEBUG_MODE: "{{ .Values.config.debug }}"
   ORIGINAL: "{{ .Values.config.originHost }}"
+  CORS_ALLOWED: "{{ .Values.config.corsAllowed }}"
+  CORS_ALLOWED_ALL: "{{ .Values.config.corsAllowedAll }}"
+  ACCESS_LIFETIME: "{{ .Values.config.accessTokenLifetime }}"
+  REFRESH_LIFETIME: "{{ .Values.config.refreshTokenLifetime }}"
 
 ---
 apiVersion: v1

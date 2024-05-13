@@ -47,6 +47,26 @@ spec:
               configMapKeyRef:
                 name: {{ .Values.containerName }}-config
                 key: ORIGINAL
+          - name: CORS_ALLOWED
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.containerName }}-config
+                key: CORS_ALLOWED
+          - name: CORS_ALLOWED_ALL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.containerName }}-config
+                key: CORS_ALLOWED_ALL
+          - name: ACCESS_LIFETIME
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.containerName }}-config
+                key: ACCESS_LIFETIME
+          - name: REFRESH_LIFETIME
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.containerName }}-config
+                key: REFRESH_LIFETIME
           - name: DATABASE_NAME
             valueFrom:
               secretKeyRef:

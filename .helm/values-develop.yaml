@@ -29,3 +29,7 @@ config:
   # Bool значения указывать "True"
   debug: "True"
   originHost: "https://apidev.acrm.app, http://apidev.acrm.app"
+  corsAllowed: "https://dev.acrm.app"
+  corsAllowedAll: "True"
+  accessTokenLifetime: 10
+  refreshTokenLifetime: 10
