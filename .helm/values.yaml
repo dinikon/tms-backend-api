@@ -5,11 +5,11 @@
 global:
   namespace: tms-api
 
-replicaCount: 3
+replicaCount: 5
 name: tms-api
 appLabel: tms-api
 containerName: tms-api-container
-appHost: api.acrm.app
+appHost: api.swlcrm.com
 
 #data base credintial ["prod", "dev"]
 database: prod
@@ -24,16 +24,16 @@ image:
 resources:
   requests:
     memory: "512Mi"
-    cpu: "100m"
+    cpu: "500m"
   limits:
     memory: "1024Mi"
-    cpu: "500m"
+    cpu: "1000m"
 
 config:
   # Bool значения указывать "True"
   debug: "False"
-  originHost: "https://api.acrm.app"
-  corsAllowed: "https://acrm.app"
+  originHost: "https://api.swlcrm.com, http://api.swlcrm.com"
+  corsAllowed: "https://api.swlcrm.com"
   corsAllowedAll: "False"
   accessTokenLifetime: 1
   refreshTokenLifetime: 1440

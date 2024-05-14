@@ -5,11 +5,11 @@
 global:
   namespace: tms-api-dev
 
-replicaCount: 2
+replicaCount: 20
 name: tms-api-dev
 appLabel: tms-api-dev
 containerName: tms-api-container-dev
-appHost: apidev.acrm.app
+appHost: apidev.swlcrm.com
 
 #data base credintial ["prod", "dev"]
 database: dev
@@ -19,8 +19,8 @@ image:
 
 resources:
   requests:
-    memory: "512Mi"
-    cpu: "100m"
+    memory: "64Mi"
+    cpu: "10m"
   limits:
     memory: "1024Mi"
     cpu: "200m"
@@ -28,8 +28,8 @@ resources:
 config:
   # Bool значения указывать "True"
   debug: "True"
-  originHost: "https://apidev.acrm.app, http://apidev.acrm.app"
-  corsAllowed: "https://dev.acrm.app"
+  originHost: "https://apidev.swlcrm.com, http://apidev.swlcrm.com"
+  corsAllowed: "https://apidev.swlcrm.com"
   corsAllowedAll: "True"
   accessTokenLifetime: 10
   refreshTokenLifetime: 10
