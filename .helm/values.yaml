@@ -5,11 +5,18 @@
 global:
   namespace: tms-api
 
-replicaCount: 5
 name: tms-api
 appLabel: tms-api
 containerName: tms-api-container
 appHost: api.swlcrm.com
+
+# Type issuer ["letsencrypt-prod", "letsencrypt-staging"]
+issuerType: "letsencrypt-prod"
+
+replications:
+  replicaCount: 3
+  minReplicasHPA: 1
+  maxReplicasHPA: 15
 
 #data base credintial ["prod", "dev"]
 database: prod
@@ -22,12 +29,20 @@ image:
   tag: latest
 
 resources:
-  requests:
-    memory: "512Mi"
-    cpu: "500m"
-  limits:
-    memory: "1024Mi"
-    cpu: "1000m"
+  presetOne:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1024Mi"
+      cpu: "750"
+  presetTwo:
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
 
 config:
   # Bool значения указывать "True"
