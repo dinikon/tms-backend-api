@@ -25,7 +25,7 @@ containerBackPort: 8000
 exposePort: 8080
 
 image:
-  repository: ghcr.io/dinikon/tms-backend-api
+  repository: ghcr.io/dinikon/tms-backend-api-dev
   tag: latest
 
 resources:
