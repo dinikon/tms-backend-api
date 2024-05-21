@@ -120,7 +120,7 @@ class CRMTrucks(models.Model):
 
 class CRMDimensions(models.Model):
     dimensions_id = models.AutoField(primary_key=True)
-    truck = models.OneToOneField(CRMTrucks, on_delete=models.CASCADE, null=True, blank=True)
+    truck = models.OneToOneField(CRMTrucks, on_delete=models.CASCADE, null=True, blank=True, related_name='dimensions')
     door_dims_height = models.FloatField(null=True, blank=True)
     inside_dims_width = models.FloatField(null=True, blank=True)
     inside_dims_height = models.FloatField(null=True, blank=True)
@@ -145,7 +145,7 @@ class CRMTruckNotes(models.Model):
                                    on_delete=models.CASCADE, null=True, blank=True)
     modify_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='modified_truck_notes',
                                   on_delete=models.CASCADE, null=True, blank=True)
-    truck = models.ForeignKey(CRMTrucks, on_delete=models.CASCADE)
+    truck = models.ForeignKey(CRMTrucks, on_delete=models.CASCADE, related_name='crmtrucknotes_set')
     note = models.TextField()
 
     def save(self, *args, **kwargs):
@@ -169,7 +169,7 @@ class CRMTruckLocations(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='created_truck_locations',
                                    on_delete=models.CASCADE, null=True, blank=True)
-    truck = models.ForeignKey(CRMTrucks, on_delete=models.CASCADE)
+    truck = models.ForeignKey(CRMTrucks, on_delete=models.CASCADE, related_name='crmtrucklocations_set')
     address = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
