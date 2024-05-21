@@ -5,27 +5,50 @@
 global:
   namespace: tms-api-dev
 
-replicaCount: 2
 name: tms-api-dev
 appLabel: tms-api-dev
 containerName: tms-api-container-dev
 appHost: apidev.swlcrm.com
 
+# Type issuer ["letsencrypt-prod", "letsencrypt-staging"]
+issuerType: "letsencrypt-staging"
+
+replications:
+  replicaCount: 3
+  minReplicasHPA: 1
+  maxReplicasHPA: 10
+
 #data base credintial ["prod", "dev"]
 database: dev
 
+containerBackPort: 8000
+exposePort: 8080
+
 image:
   repository: ghcr.io/dinikon/tms-backend-api-dev
+  tag: latest
 
 resources:
-  requests:
-    memory: "512Mi"
-    cpu: "100m"
-  limits:
-    memory: "1024Mi"
-    cpu: "200m"
+  presetOne:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1024Mi"
+      cpu: "750"
+  presetTwo:
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
 
 config:
   # Bool значения указывать "True"
-  debug: "True"
+  debug: "False"
   originHost: "https://apidev.swlcrm.com, http://apidev.swlcrm.com"
+  corsAllowed: "https://apidev.swlcrm.com"
+  corsAllowedAll: "True"
+  accessTokenLifetime: 10
+  refreshTokenLifetime: 10
