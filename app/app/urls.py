@@ -27,5 +27,7 @@ urlpatterns = [
     path('api/token/blacklist/', TokenBlacklistView.as_view(), name='token_blacklist'),
     path('select2/', include('django_select2.urls')),
 
+    path('api/v1/', include('truck.urls'), name='truck'),
+
     path('contact/', include('contact.urls'), name='contact'),
 ]
