@@ -1,41 +1,39 @@
-from rest_framework import viewsets
-from .models import (
-    PostalCodeInfo, CRMCrossBorder, CRMCertificate, CRMPreferredLoad, CRMTrucks,
-    CRMDimensions, CRMTruckNotes, CRMTruckLocations
-)
-from .serializers import (
-    PostalCodeInfoSerializer, CRMCrossBorderSerializer, CRMCertificateSerializer, CRMPreferredLoadSerializer,
-    CRMTrucksSerializer, CRMDimensionsSerializer, CRMTruckNotesSerializer, CRMTruckLocationsSerializer
-)
+from rest_framework.decorators import permission_classes
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status, permissions
+from .models import CRMTrucks
+from .serializers import CRMTrucksSerializer
+from geopy.geocoders import Nominatim
+from geopy.distance import geodesic
 
-class PostalCodeInfoViewSet(viewsets.ModelViewSet):
-    queryset = PostalCodeInfo.objects.all()
-    serializer_class = PostalCodeInfoSerializer
 
-class CRMCrossBorderViewSet(viewsets.ModelViewSet):
-    queryset = CRMCrossBorder.objects.all()
-    serializer_class = CRMCrossBorderSerializer
+@permission_classes((permissions.AllowAny,))
+class CalculateDistanceAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        radius = request.data.get('radius')
+        address = request.data.get('address')
 
-class CRMCertificateViewSet(viewsets.ModelViewSet):
-    queryset = CRMCertificate.objects.all()
-    serializer_class = CRMCertificateSerializer
+        if not radius or not address:
+            return Response({"error": "Both 'radius' and 'address' are required."}, status=status.HTTP_400_BAD_REQUEST)
 
-class CRMPreferredLoadViewSet(viewsets.ModelViewSet):
-    queryset = CRMPreferredLoad.objects.all()
-    serializer_class = CRMPreferredLoadSerializer
+        geolocator = Nominatim(user_agent="your_app_name")
+        location_title = geolocator.geocode(address)
 
-class CRMTrucksViewSet(viewsets.ModelViewSet):
-    queryset = CRMTrucks.objects.all()
-    serializer_class = CRMTrucksSerializer
+        if not location_title:
+            return Response({"error": f"Could not geocode address with title: {address}"}, status=status.HTTP_400_BAD_REQUEST)
 
-class CRMDimensionsViewSet(viewsets.ModelViewSet):
-    queryset = CRMDimensions.objects.all()
-    serializer_class = CRMDimensionsSerializer
+        trucks = CRMTrucks.objects.all()
+        results = []
 
-class CRMTruckNotesViewSet(viewsets.ModelViewSet):
-    queryset = CRMTruckNotes.objects.all()
-    serializer_class = CRMTruckNotesSerializer
+        for truck in trucks:
+            last_location = truck.crmtrucklocations_set.order_by('-created_at').first()
+            if last_location:
+                location_truck = geolocator.geocode(last_location.address)
+                if location_truck:
+                    distance = geodesic((location_title.latitude, location_title.longitude), (location_truck.latitude, location_truck.longitude)).km
+                    if distance <= float(radius):
+                        serializer = CRMTrucksSerializer(truck, context={'distance': distance})
+                        results.append(serializer.data)
 
-class CRMTruckLocationsViewSet(viewsets.ModelViewSet):
-    queryset = CRMTruckLocations.objects.all()
-    serializer_class = CRMTruckLocationsSerializer
+        return Response(results, status=status.HTTP_200_OK)
