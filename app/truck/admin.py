@@ -4,7 +4,6 @@ from django.db import models
 from django.forms import BaseInlineFormSet
 from django.utils.translation import gettext_lazy as _
 
-from contact.forms import CRMContactForm
 from .models import (
     CRMTrucks, CRMCrossBorder, CRMCertificate, CRMDimensions, CRMTruckNotes, CRMTruckLocations
 )
@@ -49,7 +48,6 @@ class CrmDimensionsInline(admin.StackedInline):
 
 class CrmTruckLocationsInline(admin.TabularInline):
     model = CRMTruckLocations
-    form = CRMContactForm
     fields = ('address', 'created_at', 'created_by')
     readonly_fields = ('created_at', 'created_by')
     extra = 1  # Количество пустых форм для новых записей

@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from .forms import CRMContactForm, CRMCompanyForm
 from .models import CRMContact, CRMContactFields, CRMContactCompany, CRMCompanies, CRMContactDrivers, CRMContactDriverEC
 from django.contrib.auth import get_user_model
 
@@ -69,7 +68,6 @@ class CRMContactInline(admin.TabularInline):
 
 
 class CRMContactAdmin(admin.ModelAdmin):
-    form = CRMContactForm
     list_display = ('full_name', 'company_id', 'assigned_to', 'created_by_user', 'last_activity_time', 'opened_status')
     list_filter = ('opened', 'created_at', 'updated_at', 'assigned_by', 'created_by')
     search_fields = ('full_name', 'first_name', 'last_name', 'address', 'comments')
@@ -135,7 +133,6 @@ class CRMContactCompanyInline(admin.TabularInline):
 
 
 class CRMCompanyAdmin(admin.ModelAdmin):
-    form = CRMCompanyForm
     list_display = ('title', 'address', 'created_by')
     # list_filter = ('opened', 'created_at', 'updated_at', 'assigned_by', 'created_by')
     # search_fields = ('full_name', 'first_name', 'last_name', 'address', 'comments')
