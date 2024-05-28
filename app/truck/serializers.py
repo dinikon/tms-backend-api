@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from .models import CRMTrucks, CRMTruckLocations
+from .models import CRMTrucks, CRMTruckLocations, PostalCodeInfo
+
+
+class PostalCodeInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostalCodeInfo
+        fields = '__all__'
 
 
 class CRMTruckLocationsSerializer(serializers.ModelSerializer):

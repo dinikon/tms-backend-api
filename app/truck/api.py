@@ -2,10 +2,18 @@ from rest_framework.decorators import permission_classes
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
-from .models import CRMTrucks
-from .serializers import CRMTrucksSerializer
+from .models import CRMTrucks, PostalCodeInfo
+from .serializers import CRMTrucksSerializer, PostalCodeInfoSerializer
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
+
+
+@permission_classes((permissions.AllowAny,))
+class PostalCodeInfoListView(APIView):
+    def get(self, request):
+        postal_codes = PostalCodeInfo.objects.all()
+        serializer = PostalCodeInfoSerializer(postal_codes, many=True)
+        return Response(serializer.data)
 
 
 @permission_classes((permissions.AllowAny,))
